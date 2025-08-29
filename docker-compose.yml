@@ -1,0 +1,40 @@
+services:
+  db:
+    image: postgres:13 # Using a specific version is better than 'latest'
+    container_name: postgres_db
+    environment:
+      # These variables are used by the postgres image to initialize the database
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      # This line makes your database data persist even if the container is removed
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      # This check tells Docker when the database is actually ready for connections
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  web:
+    build: .
+    container_name: hotel_app
+    # The command should only be the main process that keeps the container running
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+    environment:
+      # These variables are passed to your Django app
+      - DATABASE_URL=postgres://postgres:postgres@db:5432/postgres
+      - SECRET_KEY=your_secret_key_here # It's better to manage secrets here
+    depends_on:
+      db:
+        # This condition tells the web service to wait until the db is "healthy"
+        condition: service_healthy
+
+volumes:
+  # Defines the named volume for database persistence
+  db_data:

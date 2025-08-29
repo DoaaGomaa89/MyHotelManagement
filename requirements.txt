@@ -1,0 +1,11 @@
+# Web Framework - Upgraded from 3.x to a modern Long-Term Support (LTS) version
+Django~=4.2
+
+# PostgreSQL database adapter for Python - Replaces the older psycopg2-binary
+psycopg[c]
+
+# Python Imaging Library - For image processing capabilities
+Pillow
+
+# Utility to parse database URLs from environment variables
+dj-database-url

@@ -1,0 +1,61 @@
+{% extends "hotelapp/base.html" %}
+
+{% block main_content %}
+{% get_today as today %}
+{% get_tomorrow as tomorrow %}
+
+<div class="container">
+    <br>
+    <div class="filters">
+
+        <h3>Reservation</h3>
+
+        <form action="{% url 'hotelapp:add_reservation' %}" method="post">
+            {% csrf_token %}
+            <div class="row filters">
+                <div class="daterange col-md-4">
+                    <label>Duration: </label>
+                    <div class="input-group input-daterange">
+                        <div class="input-group-addon">From: &nbsp;</div>
+                        <input type="date" id="start" name="date_start"
+                               value="{{ date_start }}"
+                               min="{% get_today %}" required>
+                        <br>
+                        <div class="input-group-addon">&nbsp; To: &nbsp;</div>
+                        <input type="date" id="end" name="date_end"
+                               value="{{ date_end }}"
+                               min="{% get_tomorrow %}" required>
+                    </div>
+                </div>
+
+                <div class="guests_count col-md-4">
+                    <label>Number of guests: </label>
+                    <div>
+                        <input type="number" min="1" max="10" name="guests_count" placeholder="Number of guests"
+                               value="{{ guests_count }}" required>
+                    </div>
+                </div>
+
+                <input type="hidden" name="room_id" value="{{ room.id }}">
+
+                <div class="col-md-4">
+                    <button class="btn btn-lg btn-primary btn-block" type="submit">Book now</button>
+                </div>
+            </div>
+        </form>
+        <br>
+        <div class="col-lg-9">
+
+        <div class="card mt-4">
+          <img class="card-img-top img-fluid" src="{{ room.photo.url }}" alt="">
+          <div class="card-body">
+            <h3 class="card-title">{{ room.name }}</h3>
+            <h4>{{ room.price_for_night }}-USD</h4>
+              <p class="card-text">{{ room.description }}</p>
+          </div>
+        </div>
+        <!-- /.card -->
+
+      </div>
+</div>
+{% endblock %}

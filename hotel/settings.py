@@ -29,7 +29,7 @@ SECRET_KEY = '%#9vuzw4d-r6#=d1rz758!83ft=syby0c(_1vhvqgr2ghism9k'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", "0.0.0.0"]
 
 
 # Application definition
@@ -81,9 +81,21 @@ WSGI_APPLICATION = 'hotel.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
+# DATABASES = {
+#     'default': dj_database_url.config(conn_max_age=600)
+# }
+
 DATABASES = {
-    'default': dj_database_url.config(conn_max_age=600)
+  "default": {
+    "ENGINE": "django.db.backends.postgresql",
+    "NAME": os.getenv("DB_NAME", "hotel"),
+    "USER": os.getenv("DB_USER", "hotel"),
+    "PASSWORD": os.getenv("DB_PASSWORD", "hotel"),
+    "HOST": os.getenv("DB_HOST", "db"),
+    "PORT": os.getenv("DB_PORT", "5432"),
+  }
 }
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
 # Password validation
@@ -123,4 +135,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+
 
